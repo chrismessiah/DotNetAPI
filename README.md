@@ -1,6 +1,6 @@
 # TomatoAPI
 
-Dockerized .NET Core 1.1.6 REST API boilerplate with Postgresql and .env vars
+Dockerized .NET Core 1.1.5 REST API boilerplate with Postgresql and .env vars
 
 ## Imperfections
 
