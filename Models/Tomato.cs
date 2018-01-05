@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 * Data annotations for tell EntityFramework
 * how to treat the fields of each model.
 */
-namespace TomatoAPI
+namespace TomatoAPI.Models
 {
     public class Tomato
     {

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using TomatoAPI.Data;
 
 namespace TomatoAPI
 {
@@ -27,8 +29,12 @@ namespace TomatoAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            services.AddMvc();
+            // *********** CONFIGURES POSTRES FOR GIVEN CONTEXTS VIA DEP. INJ. *********
+            var connectionString = Configuration.GetConnectionString("DatabaseUrl");
+            services.AddEntityFrameworkNpgsql().AddDbContext<TomatoDbContext>(options => options.UseNpgsql(connectionString));
+            // *********** CONFIGURES POSTRES FOR GIVEN CONTEXTS VIA DEP. INJ. *********
+
+            services.AddMvc(); // Add framework services.
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

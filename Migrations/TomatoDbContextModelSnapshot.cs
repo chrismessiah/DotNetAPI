@@ -3,20 +3,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using TomatoAPI;
+using TomatoAPI.Data;
+using TomatoAPI.Models;
 
 namespace TomatoAPI.Migrations
 {
-    [DbContext(typeof(TomatoDb))]
-    [Migration("20180104171912_First Migration")]
-    partial class FirstMigration
+    [DbContext(typeof(TomatoDbContext))]
+    partial class TomatoDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
                 .HasAnnotation("ProductVersion", "1.1.5");
 
-            modelBuilder.Entity("TomatoAPI.Tomato", b =>
+            modelBuilder.Entity("TomatoAPI.Models.Tomato", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();

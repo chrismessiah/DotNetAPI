@@ -3,30 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TomatoAPI;
+using TomatoAPI.Data;
+using TomatoAPI.Models;
 
 namespace TomatoAPI.Controllers
 {
     [Route("api/[controller]")]
     public class TomatosController : Controller
     {
+        // *********** REQUIRED FOR DATABASE CALLS *********
+        private readonly TomatoDbContext _context;
+        public TomatosController(TomatoDbContext context) { _context = context; }
+        // *********** REQUIRED FOR DATABASE CALLS *********
+
         // GET api/Tomatos
         [HttpGet]
         public IEnumerable<Tomato> Get()
         {
-            using (TomatoDb db = new TomatoDb())
-            {
-                return db.Tomatos.ToList();
-            }
+            return _context.Tomatos.ToList();
         }
 
         // GET api/Tomatos/5
         [HttpGet("{id}")]
         public Tomato Get(int id)
         {
-            using (TomatoDb db = new TomatoDb())
-            {
-                return db.Tomatos.First(t => t.Id == id);
-            }
+            return _context.Tomatos.First(t => t.Id == id);
         }
 
         // POST api/Tomatos
@@ -39,11 +41,8 @@ namespace TomatoAPI.Controllers
         [HttpPost]
         public void Post([FromForm] Tomato tomato)
         {
-            using (TomatoDb db = new TomatoDb())
-            {
-                db.Tomatos.Add(tomato);
-                db.SaveChanges(); // EF requires you to commit your changes by default
-            }
+            _context.Tomatos.Add(tomato);
+            _context.SaveChanges(); // EF requires you to commit your changes by default
         }
 
         // PUT api/Tomatos/5
@@ -51,25 +50,18 @@ namespace TomatoAPI.Controllers
         public void Put(int id, [FromForm] Tomato tomato)
         {
             tomato.Id = id; // Ensure an id is attached
-            using (TomatoDb db = new TomatoDb())
-            {
-                db.Tomatos.Update(tomato);
-                db.SaveChanges();
-            }
+            _context.Tomatos.Update(tomato);
+            _context.SaveChanges();
         }
 
         // DELETE api/Tomatos/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            using (TomatoDb db = new TomatoDb())
-            {
                 // Check if element exists
-                if ( db.Tomatos.Where(t => t.Id == id).Count() > 0 ) {
-                    db.Tomatos.Remove(db.Tomatos.First(t => t.Id == id));
-                    db.SaveChanges();
-                }
-
+            if ( _context.Tomatos.Where(t => t.Id == id).Count() > 0 ) {
+                _context.Tomatos.Remove(_context.Tomatos.First(t => t.Id == id));
+                _context.SaveChanges();
             }
         }
     }

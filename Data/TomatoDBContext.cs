@@ -1,18 +1,25 @@
 using Microsoft.EntityFrameworkCore;
+using TomatoAPI;
+using TomatoAPI.Models;
+// Need to change this
 
 /*
 * provides EntityFramework a database context so that it knows to build
 * a table using our TomatoModel
 */
 
-namespace TomatoAPI
+namespace TomatoAPI.Data
 {
     /*
     * We define a database context by creating a class that extends the
     * DbContext class from EntityFramework.
     */
-    public class TomatoDb : DbContext
+    public class TomatoDbContext : DbContext
     {
+        // *********** CONFIGURES POSTRES FOR THIS CONTEXT VIA DEP. INJ. *********
+        public TomatoDbContext(DbContextOptions options) : base(options) {}
+        // *********** CONFIGURES POSTRES FOR THIS CONTEXT VIA DEP. INJ. *********
+
         /*
         * Reference our tomato table using this:
         * A DbSet is a generic collection which is treated as the database table
@@ -23,13 +30,5 @@ namespace TomatoAPI
         */
         public DbSet<Tomato> Tomatos { get; set; }
 
-        /*
-        * Tell EntityFramework to use SQLite as the database provider and save
-        * all changes to a file named Tomatos.db
-        */
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite("Filename=./Tomatos.db");
-        }
     }
 }
