@@ -1,6 +1,6 @@
 # TomatoAPI
 
-Dockerized .NET Core 1.1 REST API boilerplate with Postgresql and .env vars
+Dockerized .NET Core 1.1.6 REST API boilerplate with Postgresql and .env vars
 
 ## Imperfections
 
@@ -14,7 +14,17 @@ Make sure you set these env vars using `docker ... -e KEY="VALUE"` or similar
 
 ### 2. `appsettings.json` is overrided
 
-Many env-variables are stored in the `env` dict in `Globals.cs` to allow passing enviroment through docker, this causes `appsettings.json` to become unreliable. Currently both are being used and should be migrated to a better solution.
+Many enviroment variables are stored in the `env` dict in `Globals.cs` to allow passing enviroment through docker or reading from `.env`, this causes `appsettings.json` to become unreliable. Currently both are being used and should be migrated to a better solution.
 
 ### 3. Migrations run with `dotnet run` (production only)
 To allow migrations to be executed automatically they are being run on app start on production enviroments. This could be dangerous since **data may be lost** unexpectedly if an unwanted migration is commited and pushed
+
+### 4. Connecting to Host Postgres from inside Docker container using localhost wont work.
+This is due to two main reasons.
+
+1. Postgres does by defualt not allow remote connections
+2. Due to Docker networking localhost inside container is not localhost outside it.
+
+## Further notes
+
+* .NET app will listen to port 5000 from inside the container on production enviroments
