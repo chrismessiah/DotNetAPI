@@ -25,6 +25,7 @@ This is due to two main reasons.
 1. Postgres does by defualt not allow remote connections
 2. Due to Docker networking localhost inside container is not localhost outside it.
 
-## Further notes
+## Notes
 
-* .NET app will listen to port 5000 from inside the container on production enviroments
+* The .NET app will listen to port 5000 from inside the container on production enviroments
+* To rename the just replace all TomatoAPI entries with the name of the project as well as the project root folder
