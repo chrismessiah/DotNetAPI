@@ -72,12 +72,19 @@ namespace TomatoAPI
             }
             else
             {
-                Globals.env.Add("DOTNET_ENV", "Development");
-                string[] lines = System.IO.File.ReadAllLines(@"./.env");
-                foreach (string line in lines)
+                string envFile = "./.env";
+                if (System.IO.File.Exists(envFile)) {
+                    string[] lines = System.IO.File.ReadAllLines(envFile);
+                    foreach (string line in lines)
+                    {
+                        var index = line.IndexOf("=");
+                        Globals.env.Add(line.Substring(0, index), line.Substring(index+1));
+                    }
+                }
+                
+                if (!Globals.env.ContainsKey("DOTNET_ENV"))
                 {
-                    var index = line.IndexOf("=");
-                    Globals.env.Add(line.Substring(0, index), line.Substring(index+1));
+                    Globals.env.Add("DOTNET_ENV", "Development");
                 }
             }
         }
