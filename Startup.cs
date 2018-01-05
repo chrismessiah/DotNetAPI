@@ -30,7 +30,9 @@ namespace TomatoAPI
         public void ConfigureServices(IServiceCollection services)
         {
             // *********** CONFIGURES POSTRES FOR GIVEN CONTEXTS VIA DEP. INJ. *********
-            var connectionString = Configuration.GetConnectionString("DatabaseUrl");
+            ReadEnvVars();
+            var connectionString = Globals.env["DOTNET_ENV"] == "Production" ? Globals.env["CONNECTION_STRING"] : Configuration.GetConnectionString("DatabaseUrl");
+
             services.AddEntityFrameworkNpgsql().AddDbContext<TomatoDbContext>(options => options.UseNpgsql(connectionString));
             // *********** CONFIGURES POSTRES FOR GIVEN CONTEXTS VIA DEP. INJ. *********
 
@@ -55,6 +57,29 @@ namespace TomatoAPI
             }
 
             app.UseMvc();
+        }
+
+        private void ReadEnvVars()
+        {
+            if (Environment.GetEnvironmentVariable("DOTNET_ENV") == "Production")
+            {
+                var enumerator = Environment.GetEnvironmentVariables().GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    // adds ALL env vars not only those passed by docker
+                    Globals.env.Add(enumerator.Key.ToString(), enumerator.Value.ToString());
+                }
+            }
+            else
+            {
+                Globals.env.Add("DOTNET_ENV", "Development");
+                string[] lines = System.IO.File.ReadAllLines(@"./.env");
+                foreach (string line in lines)
+                {
+                    var index = line.IndexOf("=");
+                    Globals.env.Add(line.Substring(0, index), line.Substring(index+1));
+                }
+            }
         }
     }
 }
