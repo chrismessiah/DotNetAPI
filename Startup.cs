@@ -39,8 +39,20 @@ namespace TomatoAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(
+            IApplicationBuilder app,
+            IHostingEnvironment env,
+            ILoggerFactory loggerFactory,
+            TomatoDbContext context
+        )
         {
+            // MIGRATE DATABASE IF PRODUCTION
+            if (Globals.env["DOTNET_ENV"] == "Production")
+            {
+                context.Database.Migrate();
+            }
+            // MIGRATE DATABASE IF PRODUCTION
+
             // Makes the API open for any queries
             // !!!!!!!!! NOT SECURE !!!!!!!!
             // !!!!!!!!! NOT SECURE !!!!!!!!
