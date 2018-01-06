@@ -13,19 +13,15 @@ namespace DotNetAPI
         public static void Main(string[] args)
         {
             Globals.ReadEnviromentVariables();
+            string hostingUrl = (Globals.env["DOTNET_ENV"] == "Production") ? "http://0.0.0.0:5000" : "http://localhost:5000";
 
-            var foo = new WebHostBuilder()
+            var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
-                .UseStartup<Startup>();
-
-            if (Globals.env["DOTNET_ENV"] == "Production")
-            {
-                foo = foo.UseUrls("http://0.0.0.0:5000");
-            }
-
-            var host = foo .Build();
+                .UseStartup<Startup>()
+                .UseUrls(hostingUrl)
+                .Build();
             host.Run();
         }
     }
