@@ -13,12 +13,19 @@ namespace DotNetAPI.Models
         public int Id { get; set; }
 
         [Required] // Required field attribute
-        [MaxLength(20)] // heavily used for validation and will restrict strings
-        public string Name { get; set; }
+        [MaxLength(50)] // heavily used for validation and will restrict strings
+        public string Fullname { get; set; }
 
-        [DataType(DataType.PostalCode)] // Data Type attribute, extensively used by ASP.NET MVC for generating form specific elements
-        public string OriginPostCode { get; set; }
+        [Required]
+        public string Email { get; set; }
 
+        [Required]
+        public string Password { get; set; }
+
+        [Required]
+        public string Salt { get; set; }
+
+        [Required]
         public GenderClass Gender { get; set; }
     }
 

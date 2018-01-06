@@ -12,7 +12,6 @@ namespace DotNetAPI
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("111111");
             Globals.ReadEnviromentVariables();
 
             var foo = new WebHostBuilder()

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using DotNetAPI;
 using DotNetAPI.Data;
 using DotNetAPI.Models;
@@ -32,17 +34,21 @@ namespace DotNetAPI.Controllers
         }
 
         // POST api/Users
-        /*
-        * Using JObject ensures that however the data is posted, we are able to
-        * serialize it to the related class. JObject is basically a JSON Object
-        * data type in C#. Can be assigned a specific data type with the
-        * ToObject method which requires the datatype to serialize to.
-        */
         [HttpPost]
         public void Post([FromForm] User user)
         {
+            // will fail if Password not set in post-request!
+            var passStruct = GeneratePassword(user.Password);
+            user.Salt = passStruct.Salt;
+            user.Password = passStruct.Hash;
+
             _context.Users.Add(user);
             _context.SaveChanges(); // EF requires you to commit your changes by default
+        }
+
+        private string GenerateHash(string password, string salt)
+        {
+            return GenerateHash(password, Convert.FromBase64String(salt));
         }
 
         // PUT api/Users/5
@@ -63,6 +69,47 @@ namespace DotNetAPI.Controllers
                 _context.Users.Remove(_context.Users.First(t => t.Id == id));
                 _context.SaveChanges();
             }
+        }
+
+
+
+
+
+        struct PasswordStruct { public string Salt; public string Hash; }
+        private PasswordStruct GeneratePassword(string password)
+        {
+            byte[] saltGen = new byte[128 / 8];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(saltGen);
+            }
+            string salt = Convert.ToBase64String(saltGen);
+            string hashedPassword = GenerateHash(password, saltGen);
+
+            PasswordStruct pwdStruct;
+            pwdStruct.Salt = salt;
+            pwdStruct.Hash = hashedPassword;
+            return pwdStruct;
+        }
+
+        // Returns True if match, False if no match
+        private bool VerifyPassword(string password, string hash, string salt)
+        {
+            string hashedPassword = GenerateHash(password, salt);
+            return (hashedPassword == hash) ? true : false;
+        }
+
+        private string GenerateHash(string password, byte[] salt)
+        {
+            return Convert.ToBase64String(
+                KeyDerivation.Pbkdf2(
+                    password: password,
+                    salt: salt,
+                    prf: KeyDerivationPrf.HMACSHA1,
+                    iterationCount: 10000,
+                    numBytesRequested: 256 / 8
+                )
+            );
         }
     }
 }
