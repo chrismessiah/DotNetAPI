@@ -1,4 +1,4 @@
-# TomatoAPI
+# DotNetAPI
 
 Dockerized .NET Core 1.1.5 REST API boilerplate with Postgresql and .env vars
 
@@ -28,4 +28,4 @@ This is due to two main reasons.
 ## Notes
 
 * The .NET app will listen to port 5000 from inside the container on production enviroments
-* To rename the just replace all TomatoAPI entries with the name of the project as well as the project root folder
+* To rename the just replace all DotNetAPI entries with the name of the project as well as the project root folder

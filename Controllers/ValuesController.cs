@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace TomatoAPI.Controllers
+namespace DotNetAPI.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller

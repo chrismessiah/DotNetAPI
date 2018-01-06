@@ -8,14 +8,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using TomatoAPI.Data;
+using DotNetAPI.Data;
 
-namespace TomatoAPI
+namespace DotNetAPI
 {
     public class Startup
     {
         public Startup(IHostingEnvironment env)
         {
+            Globals.ReadEnviromentVariables();
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -32,7 +34,7 @@ namespace TomatoAPI
             // *********** CONFIGURES POSTRES FOR GIVEN CONTEXTS VIA DEP. INJ. *********
             var connectionString = Globals.env["DOTNET_ENV"] == "Production" ? Globals.env["CONNECTION_STRING"] : Configuration.GetConnectionString("DatabaseUrl");
 
-            services.AddEntityFrameworkNpgsql().AddDbContext<TomatoDbContext>(options => options.UseNpgsql(connectionString));
+            services.AddEntityFrameworkNpgsql().AddDbContext<UserDbContext>(options => options.UseNpgsql(connectionString));
             // *********** CONFIGURES POSTRES FOR GIVEN CONTEXTS VIA DEP. INJ. *********
 
             services.AddMvc(); // Add framework services.
@@ -43,7 +45,7 @@ namespace TomatoAPI
             IApplicationBuilder app,
             IHostingEnvironment env,
             ILoggerFactory loggerFactory,
-            TomatoDbContext context
+            UserDbContext context
         )
         {
             // MIGRATE DATABASE IF PRODUCTION

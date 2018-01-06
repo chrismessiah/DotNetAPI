@@ -3,24 +3,27 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using TomatoAPI.Data;
-using TomatoAPI.Models;
+using DotNetAPI.Data;
+using DotNetAPI.Models;
 
-namespace TomatoAPI.Migrations
+namespace DotNetAPI.Migrations
 {
-    [DbContext(typeof(TomatoDbContext))]
-    partial class TomatoDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(UserDbContext))]
+    [Migration("20180106090657_First Migration")]
+    partial class FirstMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
                 .HasAnnotation("ProductVersion", "1.1.5");
 
-            modelBuilder.Entity("TomatoAPI.Models.Tomato", b =>
+            modelBuilder.Entity("DotNetAPI.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Gender");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -28,11 +31,9 @@ namespace TomatoAPI.Migrations
 
                     b.Property<string>("OriginPostCode");
 
-                    b.Property<int>("Tastes");
-
                     b.HasKey("Id");
 
-                    b.ToTable("Tomatos");
+                    b.ToTable("Users");
                 });
         }
     }

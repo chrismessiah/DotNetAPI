@@ -13,4 +13,4 @@ RUN dotnet publish -c Release -o out
 FROM microsoft/aspnetcore:1.1.5
 WORKDIR /app
 COPY --from=build-env /app/out ./
-ENTRYPOINT ["dotnet", "TomatoAPI.dll"]
+ENTRYPOINT ["dotnet", "DotNetAPI.dll"]

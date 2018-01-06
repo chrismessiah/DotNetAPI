@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations;
 * Data annotations for tell EntityFramework
 * how to treat the fields of each model.
 */
-namespace TomatoAPI.Models
+namespace DotNetAPI.Models
 {
-    public class Tomato
+    public class User
     {
         [Key] // Primary Key attribute
         public int Id { get; set; }
@@ -19,15 +19,13 @@ namespace TomatoAPI.Models
         [DataType(DataType.PostalCode)] // Data Type attribute, extensively used by ASP.NET MVC for generating form specific elements
         public string OriginPostCode { get; set; }
 
-        public TasteRating Tastes { get; set; }
+        public GenderClass Gender { get; set; }
     }
 
-    public enum TasteRating
+    public enum GenderClass
     {
-        Terrible,
-        Eh,
-        Good,
-        Great,
-        Superb
+        Male,
+        Female,
+        Other
     }
 }
