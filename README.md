@@ -6,6 +6,13 @@ Dockerized .NET Core 1.1.5 REST API boilerplate with Postgresql and .env vars
 
 Nothing is perfect and this project is **very far** from it. Bellow I document oddities to avoid unnecessary headices.
 
+### 0. Not by any means secure(!)
+Throughout the project there are several notes regarding thing that should be changes/updated/added in order to achive a better overall security. A few examples are
+
+* CORS is inactive
+* Enviroment variables may be accessed through multiple container layers and/or process
+* No viable method for error handling in controllers when assuming existing request parameters/body
+
 ### 1. Must-have env vars (production only)
 Make sure you set these env vars using `docker ... -e KEY="VALUE"` or similar
 
