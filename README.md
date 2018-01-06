@@ -27,5 +27,5 @@ This is due to two main reasons.
 
 ## Notes
 
-* The .NET app will listen to port 5000 from inside the container on production enviroments
+* The .NET app will always listen to **port 5000**
 * To rename the just replace all DotNetAPI entries with the name of the project as well as the project root folder
