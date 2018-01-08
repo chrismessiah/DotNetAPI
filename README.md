@@ -1,6 +1,6 @@
 # DotNetAPI
 
-Dockerized .NET Core 1.1.5 REST API boilerplate with Postgresql and .env vars
+Dockerized .NET Core 1.1.x REST API boilerplate with Postgres and .env vars
 
 ## Imperfections
 
