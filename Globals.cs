@@ -22,6 +22,12 @@ namespace DotNetAPI
                     ReadEnviromentVariablesProduction();
                     Console.WriteLine("Environment is PRODUCTION");
                 }
+
+                if (!Globals.env.ContainsKey("DOTNET_ENV")) {
+                    ClearEnviromentVariables();
+                    Globals.env.Add("DOTNET_ENV", "Development");
+                    Console.WriteLine("Nope, environment is really DEVELOPMENT");
+                }
                 haveRead = true;
             }
         }
@@ -37,17 +43,17 @@ namespace DotNetAPI
           if (Globals.env.ContainsKey("DATABASE_URL")) {
             var tmp = Globals.env["DATABASE_URL"].Replace("postgres://", "");
 
-            var user = tmp.Split(":")[0];
+            var user = (tmp.Split(new string[] { ":" }, StringSplitOptions.None))[0];
             tmp = tmp.Replace($"{user}:", "");
 
-            var password = tmp.Split("@")[0];
+            var password = (tmp.Split(new string[] { "@" }, StringSplitOptions.None))[0];
             tmp = tmp.Replace($"{password}@", "");
 
-            var host = tmp.Split(":")[0];
+            var host = (tmp.Split(new string[] { ":" }, StringSplitOptions.None))[0];
             tmp = tmp.Replace($"{host}:", "");
 
-            var port = tmp.Split("/")[0];
-            var db = tmp.Split("/")[1];
+            var port = (tmp.Split(new string[] { "/" }, StringSplitOptions.None))[0];
+            var db = (tmp.Split(new string[] { "/" }, StringSplitOptions.None))[1];
 
             Globals.env["CONNECTION_STRING"] = $"User ID={user};Password={password};Server={host};Port={port};Database={db}";
           } else {
